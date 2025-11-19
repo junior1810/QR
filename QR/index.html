@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Contacto QR Simple</title>
+
+  <!-- Librería QR -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+</head>
+<body>
+
+  <h3>Formulario de Contacto</h3>
+
+  <form id="form">
+    <label>Nombre: <input type="text" id="nombre" required></label><br><br>
+    <label>Apellido: <input type="text" id="apellido" required></label><br><br>
+    <label>Teléfono: <input type="text" id="telefono" required></label><br><br>
+    <label>Correo: <input type="email" id="correo"></label><br><br>
+
+    <button type="button" onclick="generarQR()">Generar QR</button>
+  </form>
+
+  <h3>Código QR</h3>
+  <div id="qrcode"></div>
+
+  <script>
+    function generarQR() {
+      const nombre = document.getElementById("nombre").value.trim();
+      const apellido = document.getElementById("apellido").value.trim();
+      const telefono = document.getElementById("telefono").value.trim();
+      const correo = document.getElementById("correo").value.trim();
+
+      if (!nombre || !apellido || !telefono) {
+        alert("Faltan campos obligatorios.");
+        return;
+      }
+
+      // Formato vCard SIMPLE
+      const vcard = 
+`BEGIN:VCARD
+VERSION:3.0
+N:${apellido};${nombre}
+FN:${nombre} ${apellido}
+TEL;TYPE=CELL:${telefono}
+EMAIL:${correo}
+END:VCARD`;
+
+      // Limpiar QR anterior
+      document.getElementById("qrcode").innerHTML = "";
+
+      // Generar QR
+      new QRCode(document.getElementById("qrcode"), {
+        text: vcard,
+        width: 200,
+        height: 200
+      });
+    }
+  </script>
+
+</body>
+</html>
